@@ -1,0 +1,8 @@
+gradio
+python-dotenv
+google-genai
+reportlab
+matplotlib
+PyPDF2
+python-docx
+pytest
