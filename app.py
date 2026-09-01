@@ -1,3 +1,4 @@
+import spaces
 import gradio as gr
 
 from services.parser_service import extract_text
@@ -6,35 +7,40 @@ from services.report_service import generate_pdf_report
 from services.chart_service import generate_chart
 
 
+@spaces.GPU
 def process_resume(file, role, resume_text):
     """
     Process an uploaded resume or manually pasted resume text.
     """
 
     try:
+        # Get pasted resume text
         text = resume_text.strip() if resume_text else ""
 
         # Extract text from uploaded file
         if file is not None:
             text = extract_text(file.name)
 
+        # Validate resume text
         if not text:
             return (
                 {
                     "error": (
-                        "No resume text found. Please upload a PDF/DOCX "
-                        "or paste resume text."
+                        "No resume text found. "
+                        "Please upload a PDF/DOCX or paste resume text."
                     )
                 },
                 None,
                 None,
             )
 
-        # AI analysis
+        # AI analysis using Gemini
         result = analyze_resume(text, role)
 
-        # Generate chart
-        chart = generate_chart(result.get("scores", {}))
+        # Generate score chart
+        chart = generate_chart(
+            result.get("scores", {})
+        )
 
         # Generate PDF report
         pdf = generate_pdf_report(result)
@@ -43,20 +49,25 @@ def process_resume(file, role, resume_text):
 
     except Exception as e:
         return (
-            {"error": f"An error occurred: {str(e)}"},
+            {
+                "error": f"An error occurred: {str(e)}"
+            },
             None,
             None,
         )
 
 
-with gr.Blocks(title="AI Resume Analyzer") as demo:
+with gr.Blocks(
+    title="AI Resume Analyzer"
+) as demo:
 
     gr.Markdown(
         """
         # 🚀 AI Resume Analyzer
 
         Analyze your resume using **Google Gemini AI** and receive
-        structured feedback, skill scores, recommendations, and a downloadable report.
+        structured feedback, skill scores, recommendations,
+        visual charts, and a downloadable PDF report.
         """
     )
 
@@ -66,13 +77,13 @@ with gr.Blocks(title="AI Resume Analyzer") as demo:
 
             file = gr.File(
                 label="📄 Upload Resume (PDF/DOCX)",
-                file_types=[".pdf", ".docx"],
+                file_types=[".pdf", ".docx"]
             )
 
             resume_text = gr.Textbox(
                 lines=14,
                 label="✍️ Or Paste Resume Text",
-                placeholder="Paste your resume text here...",
+                placeholder="Paste your resume text here..."
             )
 
             role = gr.Dropdown(
@@ -80,45 +91,52 @@ with gr.Blocks(title="AI Resume Analyzer") as demo:
                     "AI/ML Engineer",
                     "Data Scientist",
                     "Software Engineer",
-                    "Python Developer",
+                    "Python Developer"
                 ],
                 value="AI/ML Engineer",
-                label="🎯 Target Role",
+                label="🎯 Target Role"
             )
 
             btn = gr.Button(
                 "🚀 Analyze Resume",
-                variant="primary",
+                variant="primary"
             )
 
         with gr.Column():
 
             output = gr.JSON(
-                label="📊 AI Resume Analysis",
+                label="📊 AI Resume Analysis"
             )
 
             chart = gr.Image(
-                label="📈 Resume Score Chart",
+                label="📈 Resume Score Chart"
             )
 
             pdf = gr.File(
-                label="📄 Download PDF Report",
+                label="📄 Download PDF Report"
             )
 
     btn.click(
         fn=process_resume,
-        inputs=[file, role, resume_text],
-        outputs=[output, chart, pdf],
+        inputs=[
+            file,
+            role,
+            resume_text
+        ],
+        outputs=[
+            output,
+            chart,
+            pdf
+        ]
     )
 
 
 if __name__ == "__main__":
-    demo.launch(ssr_mode=False)
-    # demo.launch(share=True)
+    demo.launch(share=True)
+    
 
 
-
-
+# demo.launch(share=True)
 # import gradio as gr
 # from services.parser_service import extract_text
 # from services.ai_service import analyze_resume
