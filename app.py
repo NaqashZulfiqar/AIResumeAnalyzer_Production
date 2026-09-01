@@ -113,7 +113,8 @@ with gr.Blocks(title="AI Resume Analyzer") as demo:
 
 
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo.launch()
+    # demo.launch(share=True)
 
 
 
