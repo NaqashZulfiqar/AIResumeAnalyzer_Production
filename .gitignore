@@ -1,6 +1,47 @@
+# Environment variables
+
 .env
-__pycache__/
-*.pyc
+
+# Python cache
+
+**pycache**/
+*.py[cod]
+
+# Virtual environments
+
+venv/
+.venv/
+env/
+
+# IDE
+
+.vscode/
+.idea/
+
+# Generated outputs
+
 outputs/*
-!outputs/.gitkeep.gradio/
-.gradio/
+!outputs/.gitkeep
+
+# Logs
+
+*.log
+
+# OS
+
+.DS_Store
+Thumbs.db
+
+# Testing
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# .env
+# __pycache__/
+# *.pyc
+# outputs/*
+# !outputs/.gitkeep.gradio/
+# .gradio/

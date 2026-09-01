@@ -1,4 +1,4 @@
-gradio
+gradio==6.0.0
 python-dotenv
 google-genai
 reportlab
@@ -6,3 +6,12 @@ matplotlib
 PyPDF2
 python-docx
 pytest
+
+# gradio
+# python-dotenv
+# google-genai
+# reportlab
+# matplotlib
+# PyPDF2
+# python-docx
+# pytest
